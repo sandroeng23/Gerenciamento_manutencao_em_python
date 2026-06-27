@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Mini SAP PM - Ordens de Manutenção{% endblock %}
+{% block body %}
+<div class="card">
+  <h2>Nova ordem de manutenção</h2>
+  <form method="post" action="{{ url_for('ordem_nova') }}" class="row">
+    <select name="equipamento_id" required>
+      <option value="">Equipamento</option>
+      {% for e in equipamentos %}
+        <option value="{{ e.id }}">{{ e.codigo }} - {{ e.nome }}</option>
+      {% endfor %}
+    </select>
+    <input name="tipo" placeholder="Tipo">
+    <input name="descricao" placeholder="Descrição" style="width:260px">
+    <input name="data_inicio" placeholder="Início" style="width:110px">
+    <input name="data_fim" placeholder="Fim" style="width:110px">
+    <select name="status">
+      <option>Planejada</option>
+      <option>Em Andamento</option>
+      <option>Concluída</option>
+      <option>Cancelada</option>
+    </select>
+    <input name="custo" type="number" step="0.01" placeholder="Custo R$" style="width:100px">
+    <button type="submit">Salvar</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Ordens</h2>
+  {% if ordens %}
+  <table>
+    <thead>
+      <tr>
+        <th>Equipamento</th>
+        <th>Tipo</th>
+        <th>Descrição</th>
+        <th>Início</th>
+        <th>Fim</th>
+        <th>Status</th>
+        <th>Custo R$</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for o in ordens %}
+      <tr>
+        <form method="post" action="{{ url_for('ordem_editar', oid=o.id) }}">
+          <input type="hidden" name="equipamento_id" value="{{ filtro_eq or o.equipamento_id }}">
+          <td>{{ o.equipamento_nome }}</td>
+          <td><input name="tipo" value="{{ o.tipo or '' }}" style="width:90px"></td>
+          <td><input name="descricao" value="{{ o.descricao or '' }}" style="width:240px"></td>
+          <td><input name="data_inicio" value="{{ o.data_inicio or '' }}" style="width:100px"></td>
+          <td><input name="data_fim" value="{{ o.data_fim or '' }}" style="width:100px"></td>
+          <td>
+            <select name="status" style="width:110px">
+              {% for s in ['Planejada','Em Andamento','Concluída','Cancelada'] %}
+                <option {% if o.status == s %}selected{% endif %}>{{ s }}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><input name="custo" type="number" step="0.01" value="{{ o.custo }}" style="width:90px"></td>
+          <td class="actions">
+            <button type="submit" class="secondary">Atualizar</button>
+            <button type="button" class="danger" onclick="document.getElementById('del-ordem-{{ o.id }}').submit()">Excluir</button>
+          </td>
+        </form>
+        <form id="del-ordem-{{ o.id }}" method="post" action="{{ url_for('ordem_excluir', oid=o.id) }}" style="display:none" onsubmit="return confirm('Excluir ordem?')"></form>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="muted">Nenhuma ordem encontrada.</p>
+  {% endif %}
+</div>
+{% endblock %}

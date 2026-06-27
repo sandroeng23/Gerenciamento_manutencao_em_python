@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Mini SAP PM - Notificações{% endblock %}
+{% block body %}
+<div class="card">
+  <h2>Abrir notificação</h2>
+  <form method="post" action="{{ url_for('notificacoes') }}" class="row">
+    <select name="equipamento_id" required>
+      <option value="">Equipamento</option>
+      {% for e in equipamentos %}
+        <option value="{{ e.id }}">{{ e.codigo }} - {{ e.nome }}</option>
+      {% endfor %}
+    </select>
+    <input name="tipo" placeholder="Tipo">
+    <input name="descricao" placeholder="Descrição" style="width:300px">
+    <select name="prioridade">
+      <option>Baixa</option>
+      <option selected>Média</option>
+      <option>Alta</option>
+      <option>Crítica</option>
+    </select>
+    <select name="status">
+      <option>Aberta</option>
+      <option>Fechada</option>
+    </select>
+    <button type="submit">Salvar</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Notificações</h2>
+  {% if notificacoes %}
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Equipamento</th>
+        <th>Tipo</th>
+        <th>Descrição</th>
+        <th>Prioridade</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for n in notificacoes %}
+      <tr>
+        <td>{{ n.data_criacao }}</td>
+        <td>{{ n.equipamento_nome }}</td>
+        <td>{{ n.tipo }}</td>
+        <td>{{ n.descricao }}</td>
+        <td>{{ n.prioridade }}</td>
+        <td>{{ n.status }}</td>
+        <td class="actions">
+          {% if n.status == 'Aberta' %}
+            <form method="post" action="{{ url_for('notificacao_fechar', nid=n.id) }}" style="display:inline" onsubmit="return confirm('Fechar notificação?')">
+              <button type="submit" class="secondary">Fechar</button>
+            </form>
+          {% endif %}
+          <form method="post" action="{{ url_for('notificacao_excluir', nid=n.id) }}" style="display:inline" onsubmit="return confirm('Excluir notificação?')">
+            <button type="submit" class="danger">Excluir</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="muted">Nenhuma notificação.</p>
+  {% endif %}
+</div>
+{% endblock %}

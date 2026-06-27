@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Mini SAP PM - Materiais x Equipamentos{% endblock %}
+{% block body %}
+<div class="card">
+  <h2>Vincular material a equipamento</h2>
+  <form method="post" action="{{ url_for('vinculo_novo') }}" class="row">
+    <input type="hidden" name="equipamento_id" value="{{ filtro_eq or '' }}">
+    <select name="equipamento_id" required>
+      <option value="">Selecione equipamento</option>
+      {% for e in equipamentos %}
+        <option value="{{ e.id }}" {% if filtro_eq == e.id %}selected{% endif %}>{{ e.codigo }} - {{ e.nome }}</option>
+      {% endfor %}
+    </select>
+    <select name="material_id" required>
+      <option value="">Selecione material</option>
+      {% for m in materiais %}
+        <option value="{{ m.id }}">{{ m.codigo }} - {{ m.descricao }}</option>
+      {% endfor %}
+    </select>
+    <input name="quantidade" type="number" step="0.01" placeholder="Qtd" style="width:90px">
+    <input name="posicao" placeholder="Posição">
+    <input name="observacoes" placeholder="Obs.">
+    <button type="submit">Vincular</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Vínculos</h2>
+  {% if vinculos %}
+  <table>
+    <thead>
+      <tr>
+        <th>Equipamento</th>
+        <th>Material</th>
+        <th>Qtd</th>
+        <th>Posição</th>
+        <th>Obs.</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for v in vinculos %}
+      <tr>
+        <td>{{ v.equipamento }}</td>
+        <td>{{ v.material }}</td>
+        <td>{{ v.quantidade }}</td>
+        <td>{{ v.posicao }}</td>
+        <td>{{ v.observacoes }}</td>
+        <td class="actions">
+          <form method="post" action="{{ url_for('vinculo_excluir', meid=v.id, equipamento=filtro_eq or request.referrer) }}" onsubmit="return confirm('Desvincular?')">
+            <button type="submit" class="danger">Desvincular</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="muted">Selecione um equipamento no filtro acima para ver os vínculos.</p>
+  {% endif %}
+</div>
+{% endblock %}

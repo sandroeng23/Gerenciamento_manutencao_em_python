@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Mini SAP PM{% endblock %}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; margin: 0; background: #f3f5f8; color: #333; }
+    header { background: #0f4c81; color: #fff; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 18px; margin: 0; }
+    nav a { color: #fff; text-decoration: none; margin-left: 14px; font-size: 14px; opacity: 0.95; }
+    nav a:hover { text-decoration: underline; }
+    main { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .stat { background: #fff; padding: 14px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stat h3 { margin: 0 0 4px; font-size: 13px; text-transform: uppercase; color: #666; }
+    .stat p { margin: 0; font-size: 22px; font-weight: bold; color: #0f4c81; }
+    .card { background: #fff; padding: 16px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
+    th { background: #f8fafc; color: #555; font-weight: 600; }
+    tr:hover { background: #f1f5f9; }
+    form.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; }
+    input, select, textarea { padding: 7px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; }
+    button { padding: 7px 12px; border: 1px solid #0f4c81; background: #0f4c81; color: #fff; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    button.secondary { background: #fff; color: #0f4c81; }
+    button.danger { background: #b91c1c; border-color: #b91c1c; }
+    button.ghost { background: transparent; color: #0f4c81; border-color: transparent; }
+    .flash { padding: 8px 12px; border-radius: 4px; margin-bottom: 12px; font-size: 14px; }
+    .flash.ok { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .flash.erro { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+    .actions { display: flex; gap: 6px; justify-content: flex-end; }
+    .muted { color: #6b7280; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mini SAP PM</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Início</a>
+      <a href="{{ url_for('equipamentos') }}">Equipamentos</a>
+      <a href="{{ url_for('materiais') }}">Materiais</a>
+      <a href="{{ url_for('vinculos') }}">Materiais x Equip.</a>
+      <a href="{{ url_for('ordens') }}">Ordens</a>
+      <a href="{{ url_for('notificacoes') }}">Notificações</a>
+      <a href="{{ url_for('historico') }}">Histórico</a>
+    </nav>
+  </header>
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block body %}{% endblock %}
+  </main>
+</body>
+</html>

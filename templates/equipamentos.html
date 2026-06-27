@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Mini SAP PM - Equipamentos{% endblock %}
+{% block body %}
+<div class="card">
+  <h2>Cadastrar equipamento</h2>
+  <form method="post" action="{{ url_for('equipamento_novo') }}" class="row">
+    <input type="hidden" name="id" value="">
+    <input name="codigo" placeholder="Código" required>
+    <input name="nome" placeholder="Nome" required>
+    <input name="tipo" placeholder="Tipo">
+    <input name="local" placeholder="Local">
+    <input name="fabricante" placeholder="Fabricante">
+    <input name="modelo" placeholder="Modelo">
+    <input name="data_instalacao" placeholder="Data instalação (YYYY-MM-DD)">
+    <input name="observacoes" placeholder="Observações">
+    <button type="submit">Salvar</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Equipamentos cadastrados</h2>
+  {% if equipamentos %}
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>Tipo</th>
+        <th>Local</th>
+        <th>Fabricante</th>
+        <th>Modelo</th>
+        <th>Instalação</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for e in equipamentos %}
+      <tr>
+        <form method="post" action="{{ url_for('equipamento_editar', eid=e['id']) }}">
+          <td><input name="codigo" value="{{ e['codigo'] }}"></td>
+          <td><input name="nome" value="{{ e['nome'] }}"></td>
+          <td><input name="tipo" value="{{ e['tipo'] or '' }}"></td>
+          <td><input name="local" value="{{ e['local'] or '' }}"></td>
+          <td><input name="fabricante" value="{{ e['fabricante'] or '' }}"></td>
+          <td><input name="modelo" value="{{ e['modelo'] or '' }}"></td>
+          <td><input name="data_instalacao" value="{{ e['data_instalacao'] or '' }}"></td>
+          <td class="actions">
+            <button type="submit" class="secondary">Atualizar</button>
+            <button type="button" class="danger" onclick="document.getElementById('del-{{ e.id }}').submit()">Excluir</button>
+          </td>
+        </form>
+        <form id="del-{{ e.id }}" method="post" action="{{ url_for('equipamento_excluir', eid=e['id']) }}" style="display:none" onsubmit="return confirm('Excluir equipamento?')"></form>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="muted">Nenhum equipamento cadastrado.</p>
+  {% endif %}
+</div>
+{% endblock %}

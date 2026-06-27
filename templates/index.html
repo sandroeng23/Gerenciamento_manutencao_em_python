@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Mini SAP PM - Início{% endblock %}
+{% block body %}
+<div class="stats">
+  <div class="stat">
+    <h3>Equipamentos</h3>
+    <p>{{ stats.equipamentos }}</p>
+  </div>
+  <div class="stat">
+    <h3>Materiais</h3>
+    <p>{{ stats.materiais }}</p>
+  </div>
+  <div class="stat">
+    <h3>Ordens</h3>
+    <p>{{ stats.ordens }}</p>
+  </div>
+  <div class="stat">
+    <h3>Notificações abertas</h3>
+    <p>{{ stats.notificacoes }}</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Acesso rápido</h2>
+  <p>Use o menu superior para navegar entre as seções.</p>
+  <ul>
+    <li><strong>Equipamentos</strong> — cadastro e edição de equipamentos.</li>
+    <li><strong>Materiais</strong> — peças e materiais do almoxarifado.</li>
+    <li><strong>Materiais x Equip.</strong> — vínculo de componentes com equipamentos.</li>
+    <li><strong>Ordens de Manutenção</strong> — acompanhamento de serviços.</li>
+    <li><strong>Notificações</strong> — falhas e manutenções não planejadas.</li>
+    <li><strong>Histórico</strong> — registros de ocorrências por equipamento.</li>
+  </ul>
+</div>
+{% endblock %}
