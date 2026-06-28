@@ -1,6 +1,6 @@
-# Mini SAP PM
+# Plano de manutenção industrial
 
-Sistema web leve para gestão de manutenção preventiva e corretiva, inspirado no módulo PM do SAP.
+Sistema web leve para gestão de manutenção preventiva e corretiva.
 
 ## Funcionalidades
 
